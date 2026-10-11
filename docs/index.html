@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Snapshot Booth</title>
+<meta name="description" content="Turn an Axis camera into a QR photo booth. Visitors scan a code, smile, and get the photo by e-mail. No kiosk, no app.">
+<meta property="og:title" content="Snapshot Booth — QR photo booth for Axis cameras">
+<meta property="og:description" content="Scan a QR, smile, get the photo by e-mail. Runs on the camera you already have.">
+<meta property="og:image" content="img/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one 1120px column; process steps alternate image/text, owner tools in a two-up band. */
+:root{
+  --bg:#fafaf9; --surface:#ffffff; --fg:#1c1917; --muted:#6b635c; --line:#e7e2dc;
+  --accent:#d97706; --accent-ink:#b45309; --accent-soft:#fef3e2; --led:#dc2626; --ok:#15803d;
+  --shot-bg:#efebe6;
+  --f-display:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
+  --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#171412; --surface:#221e1b; --fg:#f5f1ec; --muted:#a89f96; --line:#3a332e;
+  --accent:#f59e0b; --accent-ink:#fbbf24; --accent-soft:#3a2a12; --led:#f87171; --ok:#4ade80;
+  --shot-bg:#2a2521;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent-ink)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(30px,4vw,44px);line-height:1.05;font-weight:800}
+h3{font-size:22px;line-height:1.2;font-weight:600}
+p{margin:0}
+.eyebrow{font:600 13px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+.lede{font-size:19px;color:var(--muted);max-width:60ch}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font:800 19px var(--f-display);color:var(--fg);text-decoration:none;letter-spacing:-.01em}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--led);box-shadow:0 0 0 4px color-mix(in srgb,var(--led) 22%,transparent)}
+.top nav{display:flex;gap:18px;margin-left:auto;font-size:15px}
+.top nav a{color:var(--muted);text-decoration:none}
+.top nav a:hover{color:var(--fg)}
+.theme{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;height:36px;padding:0 12px;font:500 14px var(--f-body);cursor:pointer;display:flex;align-items:center;gap:6px}
+.theme svg{width:16px;height:16px}
+@media (max-width:760px){.top nav{display:none}.theme{margin-left:auto}}
+
+/* hero */
+.hero{padding-block:64px 40px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:center}
+.hero h1{font-size:clamp(42px,6.4vw,76px);line-height:.98;font-weight:800;margin:16px 0 20px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 16px var(--f-body);padding:13px 20px;border-radius:10px;text-decoration:none;border:1px solid transparent}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-ink)}
+.btn.ghost{border-color:var(--line);color:var(--fg);background:var(--surface)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:28px;font:500 14px var(--f-mono);color:var(--muted)}
+.facts span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle}
+.stage{position:relative;padding-bottom:18%}
+.stage .tv{filter:drop-shadow(0 24px 40px rgba(28,25,23,.18))}
+.stage .ph{position:absolute;right:-2%;bottom:-6%;width:33%;filter:drop-shadow(0 18px 30px rgba(28,25,23,.25))}
+@media (max-width:860px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.hero{padding-block:40px 24px}}
+
+/* strip */
+.strip{border-block:1px solid var(--line);background:var(--surface)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.strip div{padding:22px 20px;border-left:1px solid var(--line)}
+.strip div:first-child{border-left:0}
+.strip b{display:block;font:800 26px var(--f-display);letter-spacing:-.01em}
+.strip span{font-size:14px;color:var(--muted)}
+@media (max-width:760px){.strip .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}.strip div:nth-child(3){border-left:0}.strip div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* sections */
+section{padding-block:88px}
+.head{display:grid;gap:14px;margin-bottom:48px;max-width:720px}
+
+/* steps */
+.steps{display:grid;gap:72px}
+.step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.step:nth-child(even) .pic{order:2}
+.step .pic{background:var(--shot-bg);border-radius:20px;padding:20px;display:grid;place-items:center}
+.step .pic img{max-height:560px;width:auto}
+.step .pic.duo{grid-template-columns:1.9fr 1fr;gap:12px;align-items:center}
+.step .pic.duo img{max-height:none;width:100%}
+.num{font:800 15px var(--f-mono);color:var(--accent-ink);display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.num::after{content:"";height:1px;flex:1;max-width:80px;background:var(--line)}
+.step h3{font-size:clamp(24px,2.6vw,32px);margin-bottom:12px}
+.step p{color:var(--muted);max-width:52ch}
+.step ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
+.step li{display:flex;gap:10px}
+.step li::before{content:"→";color:var(--accent-ink);font-family:var(--f-mono)}
+.led{display:inline-flex;gap:6px;align-items:center;margin-top:18px;font:500 13px var(--f-mono);color:var(--muted)}
+.led i{width:10px;height:10px;border-radius:50%;background:var(--led);animation:blink 1s steps(1) infinite}
+.led i:nth-child(2){animation-duration:.5s}.led i:nth-child(3){animation-duration:.2s}.led i:nth-child(4){animation:none}
+@keyframes blink{50%{opacity:.15}}
+@media (max-width:860px){.step{grid-template-columns:minmax(0,1fr);gap:24px}.step:nth-child(even) .pic{order:0}}
+
+/* how it is wired */
+.wire{background:var(--surface);border-block:1px solid var(--line)}
+.flow{overflow-x:auto;padding-bottom:6px}
+.flow svg{min-width:860px;width:100%;height:auto}
+.flow text{font-family:var(--f-body);fill:var(--fg)}
+.flow .sm{font-size:13px;fill:var(--muted)}
+.flow .mono{font-family:var(--f-mono);font-size:12px;fill:var(--accent-ink)}
+.flow .box{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+.flow .hot{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.flow .ln{stroke:var(--muted);stroke-width:1.5;fill:none}
+.flow .ah{fill:var(--muted)}
+.specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:48px}
+.specs h3{font-size:18px;margin-bottom:6px}
+.specs p{font-size:15px;color:var(--muted)}
+@media (max-width:860px){.specs{grid-template-columns:minmax(0,1fr)}}
+
+/* owners */
+.owners{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+.owners figure{margin:0;display:grid;gap:16px}
+.owners .pic{background:var(--shot-bg);border-radius:20px;padding:16px}
+.owners figcaption h3{margin-bottom:6px}
+.owners figcaption p{color:var(--muted);font-size:15px}
+@media (max-width:860px){.owners{grid-template-columns:minmax(0,1fr)}}
+
+/* venues */
+.venues{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.venues div{background:var(--surface);padding:22px}
+.venues b{font:600 18px var(--f-display);display:block;margin-bottom:4px}
+.venues span{color:var(--muted);font-size:15px}
+@media (max-width:760px){.venues{grid-template-columns:minmax(0,1fr)}}
+
+/* setup + pricing */
+.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:start}
+.setup{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:18px}
+.setup li{counter-increment:s;display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px}
+.setup li::before{content:counter(s);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent-ink);font:600 15px var(--f-mono);display:grid;place-items:center}
+.setup b{display:block}
+.setup span{color:var(--muted);font-size:15px}
+.req{margin-top:28px;font-size:15px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}
+.req b{color:var(--fg)}
+.price{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px}
+.price .amt{font:800 72px/1 var(--f-display);letter-spacing:-.03em}
+.price .amt small{font:500 18px var(--f-body);color:var(--muted);letter-spacing:0}
+.price ul{margin:20px 0 24px;padding:0;list-style:none;display:grid;gap:10px;font-size:15px}
+.price li{display:flex;gap:10px}
+.price li::before{content:"✓";color:var(--ok);font-weight:700}
+.price .btn{width:100%;justify-content:center}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+
+/* faq */
+.faq{display:grid;gap:0;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq summary{cursor:pointer;font:600 18px var(--f-display);list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);color:var(--accent-ink)}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--muted);margin-top:10px;max-width:70ch;font-size:16px}
+
+footer{border-top:1px solid var(--line);padding-block:32px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+footer a{color:var(--muted)}
+</style>
+<script>
+(function(){var t='light';try{t=localStorage.getItem('sb-site-theme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t)})();
+</script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><span class="dot"></span>Snapshot Booth</a>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#owners">For owners</a>
+      <a href="#setup">Setup</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark theme">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+      <span id="themeLabel">Dark</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">QR photo booth for AXIS cameras</p>
+      <h1>Scan. Smile. <em>Check your inbox.</em></h1>
+      <p class="lede">Snapshot Booth turns an AXIS camera you already have into a photo booth. Visitors scan a printed QR code, type their e-mail, and the camera counts down and sends them the photo, with your branded frame on it.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://booth.4xs.dev/admin">Start the 7-day trial</a>
+        <a class="btn ghost" href="#how">See the visitor flow</a>
+      </div>
+      <div class="facts"><span>No app</span><span>No kiosk PC</span><span>Runs on the camera</span></div>
+    </div>
+    <div class="stage">
+      <img class="tv" src="img/05-screen-idle.png" alt="Preview screen showing the camera's live view with a giraffe-pattern frame and a Scan me QR code" width="1196" height="754">
+      <img class="ph" src="img/04-phone-countdown.png" alt="Phone showing a countdown with a live preview of the camera" width="486" height="941">
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div><b>1 poster</b><span>static QR, printed once</span></div>
+    <div><b>1920×1080</b><span>photo, frame included</span></div>
+    <div><b>6 languages</b><span>EN · CS · JA · FR · ES · DE</span></div>
+    <div><b>3 days</b><span>default photo retention</span></div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">The visitor's side</p>
+      <h2>Five steps, one phone, zero downloads</h2>
+      <p class="lede">This is everything a visitor sees, from the poster on the wall to the photo in their inbox.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="pic"><img src="img/01-qr-poster.png" alt="Printed poster: Take a photo, a QR code and three short instructions" width="616" height="839" loading="lazy"></div>
+        <div>
+          <div class="num">01</div>
+          <h3>Scan the printed QR</h3>
+          <p>One poster next to the camera. The code is static and belongs to that camera, so you print it once and forget about it. A preview screen with a QR on the video is optional.</p>
+          <ul><li>Any phone camera opens <code>booth.4xs.dev/i/…</code></li><li>Rotating one-time QR available for the screen</li></ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="pic"><img src="img/02-phone-email.png" alt="Phone form: e-mail field, background choice Giraffe or Polar bear, consent checkbox, Take my photo button" width="486" height="941" loading="lazy"></div>
+        <div>
+          <div class="num">02</div>
+          <h3>Type an e-mail, pick a background</h3>
+          <p>The page opens in the visitor's language. They enter an e-mail, choose one of your backgrounds and agree to a plain consent line that says when the photo will be deleted.</p>
+          <ul><li>Backgrounds are your CamOverlay graphics, shown by name</li><li>Consent text and page copy editable per language</li></ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="pic"><img src="img/03-phone-get-ready.png" alt="Phone showing You are next and a live preview from the camera" width="486" height="941" loading="lazy"></div>
+        <div>
+          <div class="num">03</div>
+          <h3>Get ready with a live preview</h3>
+          <p>When it's their turn, the phone shows what the camera sees, about two frames a second, so people can step into the frame before the countdown starts. Anyone who scans during a shot waits in line and sees their place.</p>
+          <ul><li>Preview only for the visitor whose shot is active</li><li>One shot at a time per camera, the rest queue</li></ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="pic duo">
+          <img src="img/06-screen-countdown.png" alt="Preview screen with a large countdown number 3 and a note that the camera light is blinking" width="1196" height="754" loading="lazy">
+          <img src="img/04-phone-countdown.png" alt="Phone flashing orange with countdown number 2" width="486" height="941" loading="lazy">
+        </div>
+        <div>
+          <div class="num">04</div>
+          <h3>Count down on three things at once</h3>
+          <p>The number runs on the phone, on the preview screen and on the camera itself: the front status LED blinks red faster and faster, then stays on while the photo is taken. Nobody has to look at their phone to know when to smile.</p>
+          <div class="led" aria-label="LED sequence: slow, medium, fast blink, then steady"><i></i><i></i><i></i><i></i>&nbsp;slow → medium → fast → steady</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="pic duo">
+          <img src="img/08-email.png" alt="E-mail titled Your photo from Demo ZOO with the framed photo and a View photo button" width="856" height="874" loading="lazy">
+          <img src="img/07-phone-sent.png" alt="Phone confirming the photo was sent" width="486" height="941" loading="lazy">
+        </div>
+        <div>
+          <div class="num">05</div>
+          <h3>The photo lands in their inbox</h3>
+          <p>The visitor gets an e-mail with the full-HD photo and your frame on it, plus a link to download or delete it. Photos are removed automatically after the retention period you set.</p>
+          <ul><li>Sent from <code>booth@mail.4xs.dev</code> in the visitor's language</li><li>"Delete it now" link in every e-mail</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wire" id="inside">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Under the hood</p>
+      <h2>The camera does the work. The cloud just passes notes.</h2>
+      <p class="lede">The camera sits behind your router and asks the booth server for work. No port forwarding, no video upload, no PC next to the camera.</p>
+    </div>
+    <div class="flow" role="img" aria-label="Diagram: the phone talks to booth.4xs.dev; the AXIS camera long-polls the same server, takes the photo from its own stream with CamOverlay, uploads it, and the server e-mails the visitor.">
+      <svg viewBox="0 0 980 300">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+        <rect class="box" x="10" y="90" width="200" height="120" rx="14"/>
+        <text x="110" y="132" text-anchor="middle" font-weight="600" font-size="17">Visitor's phone</text>
+        <text class="sm" x="110" y="156" text-anchor="middle">e-mail + background</text>
+        <text class="sm" x="110" y="176" text-anchor="middle">status, preview, countdown</text>
+
+        <rect class="hot" x="390" y="90" width="200" height="120" rx="14"/>
+        <text x="490" y="132" text-anchor="middle" font-weight="600" font-size="17">booth.4xs.dev</text>
+        <text class="sm" x="490" y="156" text-anchor="middle">queue · photo storage</text>
+        <text class="sm" x="490" y="176" text-anchor="middle">e-mail · owner admin</text>
+
+        <rect class="box" x="770" y="90" width="200" height="120" rx="14"/>
+        <text x="870" y="132" text-anchor="middle" font-weight="600" font-size="17">AXIS camera</text>
+        <text class="sm" x="870" y="156" text-anchor="middle">Snapshot Booth app</text>
+        <text class="sm" x="870" y="176" text-anchor="middle">+ CamOverlay frame</text>
+
+        <path class="ln" d="M210 130H388" marker-end="url(#ar)"/>
+        <text class="mono" x="300" y="120" text-anchor="middle">scan QR → request a shot</text>
+        <path class="ln" d="M390 170H212" marker-end="url(#ar)"/>
+        <text class="mono" x="300" y="192" text-anchor="middle">queued · countdown · sent</text>
+
+        <path class="ln" d="M770 130H592" marker-end="url(#ar)"/>
+        <text class="mono" x="680" y="120" text-anchor="middle">long-poll every 25 s</text>
+        <path class="ln" d="M770 170H592" marker-end="url(#ar)"/>
+        <text class="mono" x="680" y="192" text-anchor="middle">upload 1920×1080 JPEG</text>
+
+        <path class="ln" d="M490 210V258H110V212" marker-end="url(#ar)"/>
+        <text class="mono" x="300" y="280" text-anchor="middle">e-mail with photo link</text>
+
+        <path class="ln" d="M870 90V40" />
+        <text class="sm" x="870" y="30" text-anchor="middle">LED · LAN preview screen</text>
+      </svg>
+    </div>
+    <div class="specs">
+      <div><h3>Frame burned into the photo</h3><p>The photo is taken from a running 1920×1080 MJPEG stream, where CamOverlay graphics are drawn. A one-shot snapshot would leave the frame out.</p></div>
+      <div><h3>Works behind NAT</h3><p>The camera long-polls the server, about 3,500 small requests a day per camera. The preview screen streams over the local network only.</p></div>
+      <div><h3>Privacy by default</h3><p>Photos and addresses are deleted after 3 days (you choose). Visitors can delete their photo at any time. The QR is hidden while a photo is taken.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="owners">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">The owner's side</p>
+      <h2>Register with an e-mail. Manage every camera in one place.</h2>
+    </div>
+    <div class="owners">
+      <figure>
+        <div class="pic"><img src="img/09-camera-settings.png" alt="Camera settings page with status Connected, Register this camera form and camera access fields" width="1096" height="905" loading="lazy"></div>
+        <figcaption><h3>On the camera</h3><p>Install the app, type your e-mail, click the confirmation link. No tokens to copy. Add a camera user with Operator rights and you're connected.</p></figcaption>
+      </figure>
+      <figure>
+        <div class="pic"><img src="img/10-admin.png" alt="Admin page listing three cameras, backgrounds Giraffe and Polar bear, per e-mail limit and retention" width="1096" height="941" loading="lazy"></div>
+        <figcaption><h3>In the admin</h3><p>All cameras registered with your e-mail show up together. Name backgrounds, set the default, the photos-per-e-mail limit, retention days, texts and colours.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Where it fits</p><h2>Anywhere people stop to remember the moment</h2></div>
+    <div class="venues">
+      <div><b>Zoos &amp; aquariums</b><span>A background per enclosure. Families come back, so the limit resets every 30 days.</span></div>
+      <div><b>Museums &amp; galleries</b><span>A souvenir shot at the signature exhibit, without a staffed photo stand.</span></div>
+      <div><b>Breweries &amp; taprooms</b><span>Tour groups at the brewhouse, with your logo in the frame.</span></div>
+      <div><b>Trade shows</b><span>A booth photo that brings a visitor's e-mail with consent.</span></div>
+      <div><b>Viewpoints &amp; ski resorts</b><span>Outdoor AXIS cameras already pointed at the view.</span></div>
+      <div><b>Weddings &amp; events</b><span>A camera on a tripod, a poster on the table, no photographer queue.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wire" id="setup">
+  <div class="wrap two">
+    <div>
+      <div class="head" style="margin-bottom:28px"><p class="eyebrow">Setup</p><h2>Five steps to the first photo</h2></div>
+      <ol class="setup">
+        <li><div><b>Install the app on the camera</b><span>As an ACAP (<code>.eap</code>) or as a CamScripter package.</span></div></li>
+        <li><div><b>Register with your e-mail</b><span>Click the confirmation link. It also signs you in to the admin.</span></div></li>
+        <li><div><b>Design the frame in CamOverlay</b><span>At 1920×1080. Each background can switch one or more overlays.</span></div></li>
+        <li><div><b>Print the QR poster</b><span>Optionally open the preview screen on a TV or tablet on the camera's network.</span></div></li>
+        <li><div><b>Take a test photo</b><span>The settings page checks the LED and capture without sending anything.</span></div></li>
+      </ol>
+      <p class="req"><b>Requirements:</b> AXIS OS 12 (11.x should work), aarch64 camera (ARTPEC-8, ARTPEC-9, CV25), internet access from the camera. CamOverlay for the frame. Bench-tested on AXIS Q1656.</p>
+    </div>
+    <div class="price" id="pricing">
+      <p class="eyebrow">Pricing</p>
+      <p class="amt" style="margin-top:14px">$5 <small>per camera / month</small></p>
+      <ul>
+        <li>7-day free trial on your account, all cameras</li>
+        <li>No per-photo fees</li>
+        <li>Your own e-mail is never limited</li>
+        <li>Pay with PayPal or Ko-fi, cancel anytime</li>
+      </ul>
+      <a class="btn primary" href="https://booth.4xs.dev/admin">Open the admin</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">FAQ</p><h2>Questions owners ask</h2></div>
+    <div class="faq">
+      <details open><summary>Do visitors need to install anything?</summary><p>No. The QR opens a web page. Any recent phone browser works.</p></details>
+      <details><summary>Will my frame and logo be in the photo?</summary><p>Yes. The photo comes from the camera's own 1920×1080 stream, which includes your CamOverlay graphics. The QR code and countdown digits are kept out of it.</p></details>
+      <details><summary>What stops someone from taking hundreds of photos?</summary><p>Each e-mail address gets 3 photos per camera per rolling 30 days by default. You can change the number, reset it, and add unlimited addresses for staff.</p></details>
+      <details><summary>What happens when two people scan at once?</summary><p>The second visitor joins a queue and sees their position. Each gets their own photo.</p></details>
+      <details><summary>Where are photos stored, and for how long?</summary><p>On Cloudflare storage, for 3 days by default. You choose the retention per camera. Every e-mail has a link to delete the photo right away.</p></details>
+      <details><summary>Does the camera need a public IP or open ports?</summary><p>No. The camera connects out to the booth server, so it works behind any normal router or firewall that allows HTTPS.</p></details>
+      <details><summary>Which cameras are supported?</summary><p>AXIS cameras on aarch64 chips (ARTPEC-8, ARTPEC-9, CV25) with AXIS OS 12. Older ARTPEC-7 cameras are not supported by the ACAP build.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Snapshot Booth by Pavel Kotyza · <a href="https://4xs.dev">4xs.dev</a></span>
+    <span>AXIS is a trademark of Axis AB. Snapshot Booth is an independent product.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement,btn=document.getElementById('themeBtn'),label=document.getElementById('themeLabel');
+  function sync(){label.textContent=root.getAttribute('data-theme')==='dark'?'Light':'Dark'}
+  sync();
+  btn.addEventListener('click',function(){
+    var n=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',n);sync();
+    try{localStorage.setItem('sb-site-theme',n)}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
