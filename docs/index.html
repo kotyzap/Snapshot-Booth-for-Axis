@@ -41,6 +41,7 @@ h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:
 h2{font-size:clamp(30px,4vw,44px);line-height:1.05;font-weight:800}
 h3{font-size:22px;line-height:1.2;font-weight:600}
 p{margin:0}
+:lang(ja) :is(h1,h2,h3){word-break:auto-phrase}
 .eyebrow{font:600 13px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
 .lede{font-size:19px;color:var(--muted);max-width:60ch}
 code,.mono{font-family:var(--f-mono);font-size:.86em}
@@ -55,7 +56,10 @@ code,.mono{font-family:var(--f-mono);font-size:.86em}
 .top nav a:hover{color:var(--fg)}
 .theme{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;height:36px;padding:0 12px;font:500 14px var(--f-body);cursor:pointer;display:flex;align-items:center;gap:6px}
 .theme svg{width:16px;height:16px}
-@media (max-width:760px){.top nav{display:none}.theme{margin-left:auto}}
+.lang{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;height:36px;padding:0 8px;font:500 14px var(--f-body);cursor:pointer}
+@media (max-width:760px){.top nav{display:none}.lang{margin-left:auto}.top .wrap{gap:10px}}
+@media (max-width:900px){.top nav{gap:12px}}
+@media (max-width:420px){#themeLabel{display:none}}
 
 /* hero */
 .hero{padding-block:64px 40px}
@@ -100,8 +104,8 @@ section{padding-block:88px}
 .step h3{font-size:clamp(24px,2.6vw,32px);margin-bottom:12px}
 .step p{color:var(--muted);max-width:52ch}
 .step ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
-.step li{display:flex;gap:10px}
-.step li::before{content:"→";color:var(--accent-ink);font-family:var(--f-mono)}
+.step li{position:relative;padding-left:24px}
+.step li::before{content:"→";color:var(--accent-ink);font-family:var(--f-mono);position:absolute;left:0}
 .led{display:inline-flex;gap:6px;align-items:center;margin-top:18px;font:500 13px var(--f-mono);color:var(--muted)}
 .led i{width:10px;height:10px;border-radius:50%;background:var(--led);animation:blink 1s steps(1) infinite}
 .led i:nth-child(2){animation-duration:.5s}.led i:nth-child(3){animation-duration:.2s}.led i:nth-child(4){animation:none}
@@ -186,6 +190,9 @@ footer a{color:var(--muted)}
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
+    <select class="lang" id="langSel" aria-label="Language">
+      <option value="en">EN</option><option value="cs">CS</option><option value="de">DE</option><option value="es">ES</option><option value="fr">FR</option><option value="ja">JA</option>
+    </select>
     <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark theme">
       <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
       <span id="themeLabel">Dark</span>
@@ -270,7 +277,7 @@ footer a{color:var(--muted)}
           <div class="num">04</div>
           <h3>Count down on three things at once</h3>
           <p>The number runs on the phone, on the preview screen and on the camera itself: the front status LED blinks red faster and faster, then stays on while the photo is taken. Nobody has to look at their phone to know when to smile.</p>
-          <div class="led" aria-label="LED sequence: slow, medium, fast blink, then steady"><i></i><i></i><i></i><i></i>&nbsp;slow → medium → fast → steady</div>
+          <div class="led" aria-label="LED sequence: slow, medium, fast blink, then steady"><i></i><i></i><i></i><i></i>&nbsp;<span>slow → medium → fast → steady</span></div>
         </div>
       </div>
 
@@ -423,10 +430,12 @@ footer a{color:var(--muted)}
   </div>
 </footer>
 
+<script src="i18n.js"></script>
 <script>
 (function(){
   var root=document.documentElement,btn=document.getElementById('themeBtn'),label=document.getElementById('themeLabel');
-  function sync(){label.textContent=root.getAttribute('data-theme')==='dark'?'Light':'Dark'}
+  function sync(){label.textContent=window.sbT(root.getAttribute('data-theme')==='dark'?'Light':'Dark')}
+  window.sbSyncTheme=sync;
   sync();
   btn.addEventListener('click',function(){
     var n=root.getAttribute('data-theme')==='dark'?'light':'dark';
