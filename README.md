@@ -9,6 +9,9 @@ No app, no kiosk PC, no port forwarding.
 - **Website:** https://booth.4xs.dev · **Admin:** https://booth.4xs.dev/admin
 - **Visitor flow with mockups:** [docs/index.html](docs/index.html) (GitHub Pages)
 
+<img width="2752" height="1536" alt="Snapshot_Booth_5-Step_Visitor_Journey" src="https://github.com/user-attachments/assets/04e46bb9-baae-406b-ac07-a26c783f8c3a" />
+
+
 ## Download
 
 Get the latest build from [Releases](../../releases/latest):
