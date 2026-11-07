@@ -16,30 +16,34 @@ No app, no kiosk PC, no port forwarding.
 
 Get the latest build from [Releases](../../releases/latest):
 
-| File | Install as |
-|---|---|
-| `Snapshot_Booth_<version>_aarch64.eap` | ACAP — camera → Apps → Add app (allow unsigned apps) |
-| `snapshot_booth_camscripter_<version>.zip` | CamScripter package — CamScripter → Install package |
+| File | Camera | Install as |
+|---|---|---|
+| `Snapshot_Booth_<version>_aarch64.eap` | ARTPEC-8, ARTPEC-9, CV25 | Signed ACAP — camera → Apps → Add app |
+| `Snapshot_Booth_<version>_armv7hf.eap` | ARTPEC-7 | Signed ACAP — camera → Apps → Add app |
+| `snapshot_booth_box_<version>.zip` | ARTPEC-6, ARTPEC-7, ARTPEC-8, ARTPEC-9, CV25 | CamScripter package — CamScripter → Install package |
+
+Not sure which chip? It is in the camera's *System → About*.
 
 ## Requirements
 
-- AXIS OS 12 (11.x should work), aarch64 camera: ARTPEC-8, ARTPEC-9, CV25. Bench-tested on AXIS Q1656.
+- ACAP: AXIS OS 12.10 or newer. CamScripter package: any camera running CamScripter (30-day trial at [camstreamer.com](https://www.camstreamer.com)).
+- Bench-tested on AXIS Q1656 (ARTPEC-8) and AXIS M1075 (CV25).
 - Outbound HTTPS from the camera to `booth.4xs.dev`.
 - CamOverlay for the frame / backgrounds (1920×1080 services).
 - A camera user with **Operator** rights for the app.
 
 ## Setup
 
-1. Install the `.eap` (or the CamScripter `.zip`) on the camera.
-2. Open the app's settings page → **Register this camera** with your e-mail → click the confirmation link. It signs you in to the admin, where all cameras registered with that e-mail are listed.
-3. Enter the camera user and password → **Save**. Status shows "Connected to booth server".
-4. Design the frame in CamOverlay at 1920×1080. In the admin, name your backgrounds and pick the overlays for each.
-5. Print the QR from the admin. Optional: open `http://<camera>/local/snapshot_booth/screen.cgi` on a TV or tablet on the camera's network as a preview screen.
+1. Sign in at [booth.4xs.dev/admin](https://booth.4xs.dev/admin) with your e-mail → **Add a camera** → you get a one-time PIN.
+2. Install the `.eap` (or the CamScripter `.zip`) on the camera.
+3. Open the app's settings page → **Activation** → enter the PIN. The camera shows up in the admin as online.
+4. On the settings page: camera user, booth name, texts, logo, backgrounds (CamOverlay at 1920×1080), photo delivery, QR boxes.
+5. Download the QR from the admin (pick the camera under **Cameras**) and print it. Optional: open `http://<camera>/local/snapshot_booth/screen.cgi` on a TV or tablet on the camera's network as a preview screen.
 6. **Take test photo** on the settings page checks the LED and capture without sending anything.
 
 ## Pricing
 
-USD 5 per camera per month after a 7-day trial on your account. Pay with PayPal or Ko-fi in the admin.
+The first camera on your account is free, with no time limit. Each further camera is €5 per month, paid on [Ko-fi](https://ko-fi.com/pavelk) (card or PayPal). No per-photo fees.
 
 ## Privacy
 

@@ -208,7 +208,7 @@ footer a{color:var(--muted)}
       <h1>Scan. Smile. <em>Check your inbox.</em></h1>
       <p class="lede">Snapshot Booth turns an AXIS camera you already have into a photo booth. Visitors scan a printed QR code, type their e-mail, and the camera counts down and sends them the photo, with your branded frame on it.</p>
       <div class="cta">
-        <a class="btn primary" href="https://booth.4xs.dev/admin">Start the 7-day trial</a>
+        <a class="btn primary" href="https://booth.4xs.dev/admin">Start free with one camera</a>
         <a class="btn ghost" href="#how">See the visitor flow</a>
       </div>
       <div class="facts"><span>No app</span><span>No kiosk PC</span><span>Runs on the camera</span></div>
@@ -351,16 +351,16 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <div class="head">
       <p class="eyebrow">The owner's side</p>
-      <h2>Register with an e-mail. Manage every camera in one place.</h2>
+      <h2>Sign in with an e-mail. Manage every camera in one place.</h2>
     </div>
     <div class="owners">
       <figure>
         <div class="pic"><img src="img/09-camera-settings.png" alt="Camera settings page with status Connected, Register this camera form and camera access fields" width="1096" height="905" loading="lazy"></div>
-        <figcaption><h3>On the camera</h3><p>Install the app, type your e-mail, click the confirmation link. No tokens to copy. Add a camera user with Operator rights and you're connected.</p></figcaption>
+        <figcaption><h3>On the camera</h3><p>Install the app and enter the PIN from the admin. No tokens to copy. Add a camera user with Operator rights, then set texts, logo, backgrounds, photo delivery and QR boxes right here.</p></figcaption>
       </figure>
       <figure>
         <div class="pic"><img src="img/10-admin.png" alt="Admin page listing three cameras, backgrounds Giraffe and Polar bear, per e-mail limit and retention" width="1096" height="941" loading="lazy"></div>
-        <figcaption><h3>In the admin</h3><p>All cameras registered with your e-mail show up together. Name backgrounds, set the default, the photos-per-e-mail limit, retention days, texts and colours.</p></figcaption>
+        <figcaption><h3>In the admin</h3><p>All your cameras in one list: online status, photos in the last 24 hours, QR download and camera slots.</p></figcaption>
       </figure>
     </div>
   </div>
@@ -386,21 +386,21 @@ footer a{color:var(--muted)}
       <div class="head" style="margin-bottom:28px"><p class="eyebrow">Setup</p><h2>Five steps to the first photo</h2></div>
       <ol class="setup">
         <li><div><b>Install the app on the camera</b><span>As an ACAP (<code>.eap</code>) or as a CamScripter package.</span></div></li>
-        <li><div><b>Register with your e-mail</b><span>Click the confirmation link. It also signs you in to the admin.</span></div></li>
+        <li><div><b>Get a PIN in the admin</b><span>Sign in with your e-mail, add the camera and enter the PIN on its Activation tab.</span></div></li>
         <li><div><b>Design the frame in CamOverlay</b><span>At 1920×1080. Each background can switch one or more overlays.</span></div></li>
         <li><div><b>Print the QR poster</b><span>Optionally open the preview screen on a TV or tablet on the camera's network.</span></div></li>
         <li><div><b>Take a test photo</b><span>The settings page checks the LED and capture without sending anything.</span></div></li>
       </ol>
-      <p class="req"><b>Requirements:</b> AXIS OS 12 (11.x should work), aarch64 camera (ARTPEC-8, ARTPEC-9, CV25), internet access from the camera. CamOverlay for the frame. Bench-tested on AXIS Q1656.</p>
+      <p class="req"><b>Requirements:</b> ACAP on AXIS OS 12.10+ (ARTPEC-7, ARTPEC-8, ARTPEC-9, CV25) or the CamScripter package (ARTPEC-6, ARTPEC-7, ARTPEC-8, ARTPEC-9, CV25), internet access from the camera. CamOverlay for the frame. Bench-tested on AXIS Q1656 and M1075.</p>
     </div>
     <div class="price" id="pricing">
       <p class="eyebrow">Pricing</p>
-      <p class="amt" style="margin-top:14px">$5 <small>per camera / month</small></p>
+      <p class="amt" style="margin-top:14px">€5 <small>per extra camera / month</small></p>
       <ul>
-        <li>7-day free trial on your account, all cameras</li>
+        <li>First camera free, no time limit</li>
         <li>No per-photo fees</li>
         <li>Your own e-mail is never limited</li>
-        <li>Pay with PayPal or Ko-fi, cancel anytime</li>
+        <li>Pay on Ko-fi (card or PayPal), cancel anytime</li>
       </ul>
       <a class="btn primary" href="https://booth.4xs.dev/admin">Open the admin</a>
     </div>
@@ -417,7 +417,7 @@ footer a{color:var(--muted)}
       <details><summary>What happens when two people scan at once?</summary><p>The second visitor joins a queue and sees their position. Each gets their own photo.</p></details>
       <details><summary>Where are photos stored, and for how long?</summary><p>On Cloudflare storage, for 3 days by default. You choose the retention per camera. Every e-mail has a link to delete the photo right away.</p></details>
       <details><summary>Does the camera need a public IP or open ports?</summary><p>No. The camera connects out to the booth server, so it works behind any normal router or firewall that allows HTTPS.</p></details>
-      <details><summary>Which cameras are supported?</summary><p>AXIS cameras on aarch64 chips (ARTPEC-8, ARTPEC-9, CV25) with AXIS OS 12. Older ARTPEC-7 cameras are not supported by the ACAP build.</p></details>
+      <details><summary>Which cameras are supported?</summary><p>ACAP: AXIS cameras with ARTPEC-7, ARTPEC-8, ARTPEC-9 or CV25 on AXIS OS 12.10 or newer. CamScripter package: ARTPEC-6, ARTPEC-7, ARTPEC-8, ARTPEC-9 and CV25. The chip is listed in the camera's System → About.</p></details>
     </div>
   </div>
 </section>
