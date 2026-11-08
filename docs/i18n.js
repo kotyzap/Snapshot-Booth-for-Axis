@@ -26,7 +26,7 @@ var D={
  "Snapshot Booth は、お手持ちのAXISカメラをフォトブースに変えます。来場者は印刷されたQRコードを読み取り、メールアドレスを入力するだけ。カメラがカウントダウンして撮影し、ブランドフレーム付きの写真をメールで届けます。"],
 "Start free with one camera":["Začněte zdarma s jednou kamerou", "Kostenlos mit einer Kamera starten", "Empiece gratis con una cámara", "Commencez gratuitement avec une caméra", "カメラ1台まで無料で開始"],
 "See the visitor flow":["Jak to vidí návštěvník","Ablauf für Besucher ansehen","Ver el recorrido del visitante","Voir le parcours visiteur","来場者の流れを見る"],
-"No app":["Bez aplikace","Keine App","Sin app","Sans appli","アプリ不要"],
+"In-Camera App":["Aplikace v kameře","App in der Kamera","App en la cámara","Appli dans la caméra","カメラ内アプリ"],
 "No kiosk PC":["Bez kioskového PC","Kein Kiosk-PC","Sin PC de quiosco","Sans PC borne","キオスクPC不要"],
 "Runs on the camera":["Běží přímo v kameře","Läuft auf der Kamera","Funciona en la cámara","Tourne sur la caméra","カメラ上で動作"],
 "Preview screen showing the camera's live view with a giraffe-pattern frame and a Scan me QR code":[
