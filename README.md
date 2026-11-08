@@ -27,6 +27,7 @@ Not sure which chip? It is in the camera's *System → About*.
 ## Requirements
 
 - ACAP: AXIS OS 12.10 or newer. CamScripter package: any camera running CamScripter (30-day trial at [camstreamer.com](https://www.camstreamer.com)).
+- Photo resolution set on the camera: up to 4K on ARTPEC-8, ARTPEC-9 and CV25, up to 1440p on ARTPEC-6 and ARTPEC-7.
 - Bench-tested on AXIS Q1656 (ARTPEC-8) and AXIS M1075 (CV25).
 - Outbound HTTPS from the camera to `booth.4xs.dev`.
 - CamOverlay for the frame / backgrounds (services at the booth's photo resolution, set under Camera access → Image).
