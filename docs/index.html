@@ -206,7 +206,7 @@ footer a{color:var(--muted)}
 
 <div class="live" aria-label="Key facts">
   <div><b>1 poster or rotating QR</b><span>printed once, or on a screen or QR box</span></div>
-  <div><b>1920×1080</b><span>photo, frame included</span></div>
+  <div><b>Up to 4K</b><span>photo, frame included</span></div>
   <div><b>6 languages</b><span>EN · CS · JA · FR · ES · DE</span></div>
   <div><b>3 days</b><span>default photo retention</span></div>
 </div>
@@ -265,7 +265,7 @@ footer a{color:var(--muted)}
     </div>
     <div>
       <h3>The photo lands in their inbox</h3>
-      <p>The visitor gets an e-mail with the full-HD photo and your frame on it, plus a link to download or delete it. Photos are removed automatically after the retention period you set.</p>
+      <p>The visitor gets an e-mail with the full-resolution photo and your frame on it, plus a link to download or delete it. Photos are removed automatically after the retention period you set.</p>
       <ul><li>Sent from <code>booth@mail.4xs.dev</code> in the visitor's language</li><li>"Delete it now" link in every e-mail</li></ul>
     </div>
   </section>
@@ -298,7 +298,7 @@ footer a{color:var(--muted)}
         <path class="ln" d="M770 130H592" marker-end="url(#ar)"/>
         <text class="mono" x="680" y="120" text-anchor="middle">long-poll every 25 s</text>
         <path class="ln" d="M770 170H592" marker-end="url(#ar)"/>
-        <text class="mono" x="680" y="192" text-anchor="middle">upload 1920×1080 JPEG</text>
+        <text class="mono" x="680" y="192" text-anchor="middle">upload JPEG, up to 4K</text>
         <path class="ln" d="M490 210V258H110V212" marker-end="url(#ar)"/>
         <text class="mono" x="300" y="280" text-anchor="middle">e-mail with photo link</text>
         <path class="ln" d="M870 90V40"/>
@@ -306,7 +306,7 @@ footer a{color:var(--muted)}
       </svg>
     </div>
     <div class="grid3">
-      <div class="box"><b>Frame burned into the photo</b><span>The photo is taken from a running 1920×1080 MJPEG stream, where CamOverlay graphics are drawn. A one-shot snapshot would leave the frame out.</span></div>
+      <div class="box"><b>Frame burned into the photo</b><span>The photo is taken from a running MJPEG stream at the booth's resolution (up to 4K), where CamOverlay graphics are drawn. A one-shot snapshot would leave the frame out.</span></div>
       <div class="box"><b>Works behind NAT</b><span>The camera long-polls the server, about 3,500 small requests a day per camera. The preview screen streams over the local network only.</span></div>
       <div class="box"><b>Privacy by default</b><span>Photos and addresses are deleted after 3 days (you choose). Visitors can delete their photo at any time. The QR is hidden while a photo is taken.</span></div>
     </div>
@@ -348,7 +348,7 @@ footer a{color:var(--muted)}
       <ol class="setup">
         <li><div><b>Install the app on the camera</b><span>As an ACAP (<code>.eap</code>) or as a CamScripter package.</span></div></li>
         <li><div><b>Get a PIN at booth.4xs.dev</b><span>Sign up with your e-mail, add the camera and enter the PIN under General info on the camera.</span></div></li>
-        <li><div><b>Design the frame in CamOverlay</b><span>At 1920×1080. Each background can switch one or more overlays.</span></div></li>
+        <li><div><b>Design the frame in CamOverlay</b><span>At the booth's photo resolution. Each background can switch one or more overlays.</span></div></li>
         <li><div><b>Print the QR poster</b><span>Optionally open the preview screen on a TV or tablet on the camera's network.</span></div></li>
         <li><div><b>Take a test photo</b><span>The settings page checks the LED and capture without sending anything.</span></div></li>
       </ol>
@@ -393,7 +393,7 @@ footer a{color:var(--muted)}
 <div class="sh" id="faq"><h2>FAQ</h2></div>
 <div class="panel faq">
   <details open><summary>Do visitors need to install anything?</summary><p>No. The QR opens a web page. Any recent phone browser works.</p></details>
-  <details><summary>Will my frame and logo be in the photo?</summary><p>Yes. The photo comes from the camera's own 1920×1080 stream, which includes your CamOverlay graphics. The QR code and countdown digits are kept out of it.</p></details>
+  <details><summary>Will my frame and logo be in the photo?</summary><p>Yes. The photo comes from the camera's own stream at the booth's resolution (up to 4K), which includes your CamOverlay graphics. The QR code and countdown digits are kept out of it.</p></details>
   <details><summary>What stops someone from taking hundreds of photos?</summary><p>Each e-mail address gets 3 photos per camera per rolling 30 days by default; you can change the number and add unlimited addresses for staff. On top of that each camera takes at most 60 photos per hour, and a reusable QR box code opens at most 5 sessions.</p></details>
   <details><summary>What happens when two people scan at once?</summary><p>The second visitor joins a queue and sees their position. Each gets their own photo.</p></details>
   <details><summary>Is there an alternative to a printed poster?</summary><p>Yes. Show the QR on the preview screen's video, or put a battery e-paper QR box next to the camera (CamScripter package). The box shows a code that changes on a timer, sleeps outside opening hours and is set up over USB-C from the camera's settings page.</p></details>

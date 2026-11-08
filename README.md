@@ -1,6 +1,6 @@
 # Snapshot Booth for Axis
 
-**Scan. Smile. Check your inbox.** Snapshot Booth turns an AXIS camera into a QR photo booth. Visitors scan a printed QR code, type their e-mail and pick a background. The camera counts down on their phone, on an optional preview screen and with its front status LED, then e-mails them a 1920×1080 photo with your CamOverlay frame on it.
+**Scan. Smile. Check your inbox.** Snapshot Booth turns an AXIS camera into a QR photo booth. Visitors scan a printed QR code, type their e-mail and pick a background. The camera counts down on their phone, on an optional preview screen and with its front status LED, then e-mails them a photo (up to 4K) with your CamOverlay frame on it.
 
 No app, no kiosk PC, no port forwarding.
 
@@ -29,7 +29,7 @@ Not sure which chip? It is in the camera's *System → About*.
 - ACAP: AXIS OS 12.10 or newer. CamScripter package: any camera running CamScripter (30-day trial at [camstreamer.com](https://www.camstreamer.com)).
 - Bench-tested on AXIS Q1656 (ARTPEC-8) and AXIS M1075 (CV25).
 - Outbound HTTPS from the camera to `booth.4xs.dev`.
-- CamOverlay for the frame / backgrounds (1920×1080 services).
+- CamOverlay for the frame / backgrounds (services at the booth's photo resolution, set under Camera access → Image).
 - A camera user with **Operator** rights for the app.
 
 ## Setup
@@ -37,7 +37,7 @@ Not sure which chip? It is in the camera's *System → About*.
 1. Sign in at [booth.4xs.dev/admin](https://booth.4xs.dev/admin) with your e-mail → **Add a camera** → you get a one-time PIN.
 2. Install the `.eap` (or the CamScripter `.zip`) on the camera.
 3. Open the app's settings page → **Activation** → enter the PIN. The camera shows up in the admin as online.
-4. On the settings page: camera user, booth name, texts, logo, backgrounds (CamOverlay at 1920×1080), photo delivery, QR boxes.
+4. On the settings page: camera user, booth name, texts, logo, backgrounds (CamOverlay at the photo resolution), photo delivery, QR boxes.
 5. Download the QR from the admin (pick the camera under **Cameras**) and print it. Optional: open `http://<camera>/local/snapshot_booth/screen.cgi` on a TV or tablet on the camera's network as a preview screen.
 6. **Take test photo** on the settings page checks the LED and capture without sending anything.
 
