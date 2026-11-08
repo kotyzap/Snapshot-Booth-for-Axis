@@ -18,9 +18,9 @@ Get the latest build from [Releases](../../releases/latest):
 
 | File | Camera | Install as |
 |---|---|---|
+| `snapshot_booth_box_<version>.zip` | ARTPEC-6, ARTPEC-7, ARTPEC-8, ARTPEC-9, CV25 | CamScripter package — CamScripter → Install package |
 | `Snapshot_Booth_<version>_aarch64.eap` | ARTPEC-8, ARTPEC-9, CV25 | Signed ACAP — camera → Apps → Add app |
 | `Snapshot_Booth_<version>_armv7hf.eap` | ARTPEC-7 | Signed ACAP — camera → Apps → Add app |
-| `snapshot_booth_box_<version>.zip` | ARTPEC-6, ARTPEC-7, ARTPEC-8, ARTPEC-9, CV25 | CamScripter package — CamScripter → Install package |
 
 Not sure which chip? It is in the camera's *System → About*.
 
