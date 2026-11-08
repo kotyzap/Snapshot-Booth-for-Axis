@@ -132,8 +132,9 @@ main{max-width:1080px;margin:0 auto;padding:16px}
 .setup span{color:var(--muted);font-size:13.5px}
 .req{margin:16px 0 0;font-size:13.5px;color:var(--muted)}
 .req b{color:var(--fg)}
-.amt{font-size:44px;font-weight:750;line-height:1;letter-spacing:-.02em;margin:4px 0 6px}
-.amt small{font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
+.amt{font-size:clamp(28px,3.4vw,36px);font-weight:750;line-height:1.1;letter-spacing:-.02em;margin:4px 0 8px}
+.amt2{font-size:22px;font-weight:700;line-height:1.2;margin:0 0 6px}
+.amt2 small{font-size:14px;font-weight:500;color:var(--muted)}
 /* download table */
 .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
 .tbl th{text-align:left;font-weight:650;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
@@ -358,9 +359,10 @@ footer a{color:var(--muted)}
   <div class="panel" id="pricing">
     <div class="ph"><div><h3>Pricing</h3></div></div>
     <div class="pb">
-      <p class="amt">€5 <small>per extra camera / month</small></p>
+      <p class="amt">First camera free</p>
+      <p class="amt2">€5 <small>per extra camera / month</small></p>
       <ul class="checks">
-        <li>First camera free, no time limit</li>
+        <li>No time limit on the free camera</li>
         <li>No per-photo fees</li>
         <li>Your own e-mail is never limited</li>
         <li>Pay on Ko-fi (card or PayPal), cancel anytime</li>
